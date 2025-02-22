@@ -4,7 +4,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
 
-export TERM=xterm-256color
+# export TERM=screen-256color
 
 cdl()
 {
