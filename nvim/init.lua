@@ -666,7 +666,22 @@ require('lazy').setup({
       --    :Mason
       --
       --  You can press `g?` for help in this menu.
-      require('mason').setup()
+      require('mason').setup {
+        ensure_installed = {
+          'docker-compose-language-service',
+          'dockerfile-language-server',
+          'eslint-lsp',
+          'golangci-lint',
+          'gopls',
+          'htmx-lsp',
+          'lua-language-server',
+          'prettier',
+          'pyright',
+          'ruff-lsp',
+          'stylua',
+          'typescript-language-server',
+        },
+      }
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
@@ -677,6 +692,17 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        ensure_installed = {
+          'docker_compose_language_service',
+          'dockerls',
+          'eslint',
+          'gopls',
+          'htmx',
+          'lua_ls',
+          'pyright',
+          'ts_ls',
+        },
+
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
