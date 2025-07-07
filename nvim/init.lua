@@ -179,6 +179,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+-- Define key mappings for buffer navigation and deletion
+vim.api.nvim_set_keymap('n', 'gn', ':bnext<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'gp', ':bprevious<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'gd', ':bdelete<CR>', { noremap = true, silent = true })
+
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
@@ -254,13 +259,47 @@ require('lazy').setup({
 
   { 'andweeb/presence.nvim' },
   { 'fatih/vim-go' },
+  { 'tpope/vim-surround' },
+  {
+    'nosduco/remote-sshfs.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+    opts = {
+      -- Refer to the configuration section below
+      -- or leave empty for defaults
+    },
+  },
+  {
+    'nvim-tree/nvim-tree.lua',
+    version = '*',
+    lazy = false,
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('nvim-tree').setup {
+        sync_root_with_cwd = true,
+        respect_buf_cwd = true,
+        update_focused_file = {
+          enable = true,
+          update_root = true,
+        },
+      }
+    end,
+  },
   {
     'ibhagwan/fzf-lua',
     -- optional for icon support
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       -- calling `setup` is optional for customization
-      require('fzf-lua').setup {}
+      require('fzf-lua').setup {
+        buffers = {
+          actions = {
+            ['default'] = require('fzf-lua.actions').buf_edit,
+            ['ctrl-x'] = require('fzf-lua.actions').buf_del,
+          },
+        },
+      }
       vim.keymap.set('n', '<c-p>', require('fzf-lua').files, { desc = 'Fzf Files' })
       vim.keymap.set('n', '<c-l>', require('fzf-lua').live_grep, { desc = 'Fzf live_grep' })
       vim.keymap.set('n', '<leader><leader>', require('fzf-lua').buffers, { desc = 'Fzf buffers' })
@@ -820,20 +859,20 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
+      -- format_on_save = function(bufnr)
+      --   -- Disable "format_on_save lsp_fallback" for languages that don't
+      --   -- have a well standardized coding style. You can add additional
+      --   -- languages here or re-enable it for the disabled ones.
+      --   local disable_filetypes = { c = true, cpp = true }
+      --   if disable_filetypes[vim.bo[bufnr].filetype] then
+      --     return nil
+      --   else
+      --     return {
+      --       timeout_ms = 500,
+      --       lsp_format = 'fallback',
+      --     }
+      --   end
+      -- end,
       formatters_by_ft = {
         lua = { 'stylua' },
         html = { 'prettier', 'djlint' },
