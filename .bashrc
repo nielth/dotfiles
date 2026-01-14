@@ -1,5 +1,16 @@
+#
+# ~/.bashrc
+#
+
 #Run brew in bash apple silicon
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
 
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
@@ -9,7 +20,7 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 cdl()
 {
     if [ "$#" = 0 ]; then
-        cd ~ && ls 
+        cd ~ && ls
     elif [ -d "$@" ]; then
         cd "$@" && ls
     else
@@ -31,10 +42,31 @@ parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
+# Reset
+RESET="\[\e[0m\]"
+
+# Catppuccin (RGB foreground colors)
+ROSEWATER="\[\e[38;2;245;224;220m\]"
+FLAMINGO="\[\e[38;2;242;205;205m\]"
+PINK="\[\e[38;2;245;194;231m\]"
+MAUVE="\[\e[38;2;203;166;247m\]"
+RED="\[\e[38;2;243;139;168m\]"
+MAROON="\[\e[38;2;235;160;172m\]"
+PEACH="\[\e[38;2;250;179;135m\]"
+YELLOW="\[\e[38;2;249;226;175m\]"
+GREEN="\[\e[38;2;166;227;161m\]"
+TEAL="\[\e[38;2;148;226;213m\]"
+SKY="\[\e[38;2;137;220;235m\]"
+SAPPHIRE="\[\e[38;2;116;199;236m\]"
+BLUE="\[\e[38;2;137;180;250m\]"
+LAVENDER="\[\e[38;2;180;190;254m\]"
+TEXT="\[\e[38;2;205;214;244m\]"
+
 # Colour of primary prompt
-# export PS1="\u \w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
-# export PS1="\[\033[31m\]\u\[\033[0m\] \[\033[93m\]\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
-export PS1="\[\033[31m\]\u\[\033[0m\] \[\033[93m\]\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
+export PS1="${MAUVE}\u${RESET} \
+${BLUE}\w${RESET}\
+${GREEN}\$(parse_git_branch)${RESET}\
+${TEXT} > "
 
 # -- Use fd instead of fzf --
 
@@ -49,14 +81,9 @@ export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
 neofetch
 
-# On macOS / with Homebrew:
-[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
-
-# Setting PATH for Python 3.12
-# The original version is saved in .bash_profile.pysave
-PATH="/Library/Frameworks/Python.framework/Versions/3.12/bin:${PATH}"
-export PATH
-
 eval "$(fzf --bash)"
 
-. "$HOME/.cargo/env"
+# On macOS / with Homebrew:
+# [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+#
+. "$HOME/.local/bin/env"
