@@ -2,14 +2,10 @@
 # ~/.bashrc
 #
 
-#Run brew in bash apple silicon
-# eval "$(/opt/homebrew/bin/brew shellenv)"
-
-
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-alias ls='ls --color=auto'
+# alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
 export CLICOLOR=1
@@ -17,25 +13,16 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 
 # export TERM=screen-256color
 
-cdl()
-{
-    if [ "$#" = 0 ]; then
-        cd ~ && ls
-    elif [ -d "$@" ]; then
-        cd "$@" && ls
-    else
-        echo "$@" directory not found!!!
-    fi
-}
-
-alias cd='cdl'
-
-alias ..='cd ..'
 alias pip='pip3'
 alias dc='docker compose'
 alias tf='terraform'
 alias ls="eza --icons=always"
+alias ..='cd ..'
 alias tmux="TERM=xterm-256color tmux"
+
+cd() {
+  builtin cd "$@" && ls
+}
 
 # Show git branch
 parse_git_branch() {
@@ -83,7 +70,4 @@ neofetch
 
 eval "$(fzf --bash)"
 
-# On macOS / with Homebrew:
-# [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
-#
 . "$HOME/.local/bin/env"
